@@ -1,0 +1,246 @@
+/* About Us Page Styles */
+.about-section {
+    padding: 40px 0;
+}
+
+.about-section h2 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.about-content {
+    padding: 20px;
+}
+
+.about-content h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.about-content p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.about-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.about-content ul li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.about-content ul li:before {
+    content: "•";
+    color: #333;
+    position: absolute;
+    left: 0;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.team-section {
+    padding: 40px 0;
+    background: #f9f9f9;
+}
+
+.team-section h2 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.team-member {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.team-member img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.team-member h4 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.team-member p {
+    color: #666;
+}
+
+/* Blog Page Styles */
+.blog-posts {
+    margin-bottom: 40px;
+}
+
+.featured-post {
+    margin-bottom: 40px;
+}
+
+.featured-post .post-image {
+    margin-bottom: 20px;
+}
+
+.featured-post .post-image img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.post-content {
+    padding: 20px 0;
+}
+
+.post-content h2, .post-content h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.post-meta span {
+    margin-right: 15px;
+}
+
+.read-more {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.read-more:hover {
+    color: #666;
+}
+
+.blog-post {
+    margin-bottom: 30px;
+}
+
+.blog-post .post-image {
+    margin-bottom: 15px;
+}
+
+.blog-post .post-image img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.card-img-top {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 250px;
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.card.h-100 {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Sidebar Styles */
+.blog-sidebar {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.widget {
+    margin-bottom: 30px;
+}
+
+.widget h3 {
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-widget input {
+    margin-bottom: 10px;
+}
+
+.categories-widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.categories-widget ul li {
+    margin-bottom: 10px;
+}
+
+.categories-widget ul li a {
+    color: #333;
+    text-decoration: none;
+}
+
+.categories-widget ul li a:hover {
+    color: #666;
+}
+
+.recent-posts-widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recent-posts-widget ul li {
+    margin-bottom: 15px;
+}
+
+.recent-posts-widget ul li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.recent-posts-widget ul li .date {
+    color: #666;
+    font-size: 12px;
+}
+
+/* Blog Header Styles */
+.blog-header {
+    background-color: #333;
+    color: #fff;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.blog-header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+}
+
+.blog-header p {
+    font-size: 1.25rem;
+    opacity: 0.8;
+} 
