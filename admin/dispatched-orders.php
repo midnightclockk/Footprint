@@ -64,8 +64,10 @@ header('location:logout.php');
 <?php $query=mysqli_query($con,"SELECT orders.id,orderNumber,totalAmount,orderStatus,orderDate,users.name,users.contactno 
     FROM `orders` join users on users.id=orders.userId where (orderStatus='Dispatched')");
 $cnt=1;
+$orderFound = false;
 while($row=mysqli_fetch_array($query))
 {
+    $orderFound = true;
 ?>  
                                         <tr>
                                             <td><?php echo htmlentities($cnt);?></td>
@@ -81,6 +83,9 @@ while($row=mysqli_fetch_array($query))
                                             </td>
                                         </tr>
 <?php $cnt=$cnt+1; } ?>
+<?php if (!$orderFound): ?>
+    <tr><td colspan="9" style="text-align:center; font-size:18px; color:#c00; font-weight:bold;">Order is not Dispatched yet.</td></tr>
+<?php endif; ?>
                                     </tbody>
                                 </table>
                                 </div>

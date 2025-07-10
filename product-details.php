@@ -761,18 +761,8 @@ while($rw=mysqli_fetch_array($qry))
 			if (quantityInput) {
 				quantity = parseInt(quantityInput.value) || 1;
 			}
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', 'product-details.php?action=add&id=' + productId + '&qty=' + quantity + '&ajax=1', true);
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-					window.location = 'payment-method.php';
-				}
-			};
-			xhr.send();
-
-			setTimeout(function() {
-				window.location = 'payment-method.php';
-			}, 2000);
+			// Redirect to buy-now-checkout.php for address and payment
+			window.location = 'buy-now-checkout.php?action=set&id=' + productId + '&qty=' + quantity;
 		}
 
 		$(document).ready(function(){ 

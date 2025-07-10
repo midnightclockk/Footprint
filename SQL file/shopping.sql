@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2025 at 06:38 PM
+-- Generation Time: Jul 03, 2025 at 09:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,15 +32,29 @@ CREATE TABLE `admin` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updationDate` varchar(255) NOT NULL
+  `updationDate` varchar(255) NOT NULL,
+  `contactNumber` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `username`, `password`, `creationDate`, `updationDate`) VALUES
-(1, 'admin', '827ccb0eea8a706c4c34a16891f84e7b', '2024-12-31 19:21:18', '25-05-2025 12:31:02 AM');
+INSERT INTO `admin` (`id`, `username`, `password`, `creationDate`, `updationDate`, `contactNumber`) VALUES
+(1, 'admin', '202cb962ac59075b964b07152d234b70', '2024-12-31 19:21:18', '23-06-2025 09:01:08 PM', '9810104786');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `productQty` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -53,19 +67,20 @@ CREATE TABLE `category` (
   `categoryName` varchar(255) DEFAULT NULL,
   `categoryDescription` longtext DEFAULT NULL,
   `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updationDate` varchar(255) DEFAULT NULL
+  `updationDate` varchar(255) DEFAULT NULL,
+  `createdBy` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `category`
 --
 
-INSERT INTO `category` (`id`, `categoryName`, `categoryDescription`, `creationDate`, `updationDate`) VALUES
-(3, 'Nike', 'Nike offers a wide range of high-performance and stylish shoes suitable for running, training, basketball, and everyday wear, known for their innovation, comfort, and iconic designs.', '2025-01-01 07:17:37', '24-05-2025 04:40:05 PM'),
-(4, 'Adidas', 'Adidas provides versatile footwear that blends athletic functionality with urban fashion, featuring breathable materials, superior cushioning, and sleek modern looks.', '2025-01-01 07:17:37', '24-05-2025 04:40:46 PM'),
-(5, 'Puma', 'Puma shoes combine sporty aesthetics with everyday comfort, delivering lightweight, durable options for fitness enthusiasts and casual users alike.', '2025-01-01 07:17:37', '24-05-2025 04:41:04 PM'),
-(8, 'New Balance', 'New Balance specializes in well-cushioned, supportive footwear tailored for running, walking, and everyday use, balancing classic style with modern technology.', '2025-05-24 11:11:34', NULL),
-(9, 'Caliber', 'Caliber offers affordable and stylish footwear options, blending comfort and durability for casual, athletic, and everyday use, making it a popular choice for budget-conscious buyers.', '2025-05-24 11:11:59', NULL);
+INSERT INTO `category` (`id`, `categoryName`, `categoryDescription`, `creationDate`, `updationDate`, `createdBy`) VALUES
+(3, 'Nike', 'Nike offers a wide range of high-performance and stylish shoes suitable for running, training, basketball, and everyday wear, known for their innovation, comfort, and iconic designs.', '2025-01-01 07:17:37', '24-05-2025 04:40:05 PM', NULL),
+(4, 'Adidas', 'Adidas provides versatile footwear that blends athletic functionality with urban fashion, featuring breathable materials, superior cushioning, and sleek modern looks.', '2025-01-01 07:17:37', '24-05-2025 04:40:46 PM', NULL),
+(5, 'Puma', 'Puma shoes combine sporty aesthetics with everyday comfort, delivering lightweight, durable options for fitness enthusiasts and casual users alike.', '2025-01-01 07:17:37', '24-05-2025 04:41:04 PM', NULL),
+(8, 'New Balance', 'New Balance specializes in well-cushioned, supportive footwear tailored for running, walking, and everyday use, balancing classic style with modern technology.', '2025-05-24 11:11:34', NULL, NULL),
+(9, 'Caliber', 'Caliber offers affordable and stylish footwear options, blending comfort and durability for casual, athletic, and everyday use, making it a popular choice for budget-conscious buyers.', '2025-05-24 11:11:59', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -75,20 +90,30 @@ INSERT INTO `category` (`id`, `categoryName`, `categoryDescription`, `creationDa
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
+  `orderNumber` varchar(255) DEFAULT NULL,
   `userId` int(11) DEFAULT NULL,
+  `addressId` int(11) DEFAULT NULL,
   `productId` varchar(255) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `orderDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `totalAmount` decimal(10,2) DEFAULT 0.00,
   `paymentMethod` varchar(50) DEFAULT NULL,
-  `orderStatus` varchar(55) DEFAULT NULL
+  `txnType` varchar(50) DEFAULT NULL,
+  `txnNumber` varchar(100) DEFAULT NULL,
+  `orderStatus` varchar(55) DEFAULT NULL,
+  `status` varchar(32) DEFAULT 'Pending',
+  `tracking_number` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `userId`, `productId`, `quantity`, `orderDate`, `paymentMethod`, `orderStatus`) VALUES
-(4, 7, '3', 1, '2025-06-03 15:59:26', 'Internet Banking', 'in Process');
+INSERT INTO `orders` (`id`, `orderNumber`, `userId`, `addressId`, `productId`, `quantity`, `orderDate`, `totalAmount`, `paymentMethod`, `txnType`, `txnNumber`, `orderStatus`, `status`, `tracking_number`) VALUES
+(72, 'order_685b976063337', 8, NULL, '2', 1, '2025-06-25 06:29:52', 0.00, 'COD', NULL, NULL, NULL, 'Pending', NULL),
+(73, 'order_6864bd2e1e2b5', 8, NULL, '3', 1, '2025-07-02 05:01:34', 0.00, NULL, NULL, NULL, NULL, 'Pending', NULL),
+(74, 'order_6866208124a63', 8, NULL, '2', 1, '2025-07-03 06:17:37', 0.00, NULL, NULL, NULL, NULL, 'Pending', NULL),
+(75, 'order_68662085aa884', 8, NULL, NULL, NULL, '2025-07-03 06:19:29', 10000.00, 'Khalti', NULL, NULL, 'Paid', 'Pending', NULL);
 
 -- --------------------------------------------------------
 
@@ -115,7 +140,41 @@ INSERT INTO `ordertrackhistory` (`id`, `orderId`, `status`, `remark`, `postingDa
 (4, 2, 'in Process', 'Product is packed and shipped.', '2025-01-02 09:18:50'),
 (5, 2, 'Delivered', 'Delivered to to customer', '2025-01-02 09:19:07'),
 (6, 3, 'in Process', 'In process', '2025-05-24 11:43:23'),
-(7, 4, 'in Process', 'on the way', '2025-06-03 16:00:29');
+(7, 4, 'in Process', 'on the way', '2025-06-03 16:00:29'),
+(8, 28, 'in Process', 'r', '2025-06-23 11:31:17'),
+(9, 43, 'Packed', 'packed', '2025-06-24 04:52:34'),
+(10, 43, 'Dispatched', '', '2025-06-24 04:52:52'),
+(11, 43, 'Dispatched', '', '2025-06-24 04:52:55'),
+(12, 43, 'Dispatched', '', '2025-06-24 04:53:06'),
+(13, 43, 'Dispatched', '', '2025-06-24 04:54:45'),
+(14, 43, 'Dispatched', '', '2025-06-24 04:54:47'),
+(15, 43, 'Dispatched', '', '2025-06-24 04:55:28'),
+(16, 43, 'In Transit', '', '2025-06-24 04:55:37'),
+(17, 0, 'Dispatched', '', '2025-06-24 11:24:50'),
+(18, 50, 'In Transit', '', '2025-06-24 12:18:38'),
+(19, 58, 'Out For Delivery', '', '2025-06-25 04:15:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` varchar(255) DEFAULT NULL,
+  `orderId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `orderId`, `productId`, `quantity`, `price`) VALUES
+(32, 'order_68662085aa884', 0, 2, 1, 10000.00);
 
 -- --------------------------------------------------------
 
@@ -174,7 +233,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category`, `subCategory`, `productName`, `productCompany`, `productPrice`, `productPriceBeforeDiscount`, `productDescription`, `productImage1`, `productImage2`, `productImage3`, `shippingCharge`, `productAvailability`, `postingDate`, `updationDate`, `productImage4`, `productImage5`) VALUES
-(1, 3, 15, 'Air Jordan 1 Low G', 'Nike', 10000, 12000, '<p class=\"nds-text css-pxxozx e1yhcai00 text-align-start appearance-body1 color-primary weight-regular\" data-testid=\"product-description\" style=\"box-sizing: inherit; margin-bottom: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 16px; line-height: 1.5; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; vertical-align: baseline; color: rgb(17, 17, 17);\">Feel unbeatable, from the tee box to the final putt. Inspired by one of the most iconic sneakers of all time, the Air Jordan 1 G is an instant classic on the course. With Air cushioning underfoot, a Wings logo on the heel and an integrated traction pattern to help you power through your swing, it delivers all the clubhouse cool of the original AJ1—plus everything you need to play 18 holes in comfort.</p><br style=\"box-sizing: inherit; color: rgb(17, 17, 17); font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-size: 16px;\"><ul class=\"css-1vql4bw eru6lik0 nds-list\" style=\"box-sizing: inherit; margin-bottom: 0px; margin-left: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-alternates: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; vertical-align: baseline; list-style: none; color: rgb(17, 17, 17);\"><li data-testid=\"product-description-color-description\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Shown:&nbsp;White/University Blue</li><li data-testid=\"product-description-style-color\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Style:&nbsp;DD9315-100</li></ul>', 'AIR+JORDAN+1+LOW.avif', 'AIR+JORDAN+1+LOW (2).avif', 'AIR+JORDAN+1+LOW (1).avif', 0, 'In Stock', '2025-05-24 11:38:06', NULL, NULL, NULL),
+(1, 3, 15, 'Air Jordan 1 Low G', 'Nike', 1, 12000, '<p class=\"nds-text css-pxxozx e1yhcai00 text-align-start appearance-body1 color-primary weight-regular\" data-testid=\"product-description\" style=\"box-sizing: inherit; margin-bottom: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 16px; line-height: 1.5; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; vertical-align: baseline; color: rgb(17, 17, 17);\">Feel unbeatable, from the tee box to the final putt. Inspired by one of the most iconic sneakers of all time, the Air Jordan 1 G is an instant classic on the course. With Air cushioning underfoot, a Wings logo on the heel and an integrated traction pattern to help you power through your swing, it delivers all the clubhouse cool of the original AJ1—plus everything you need to play 18 holes in comfort.</p><br style=\"box-sizing: inherit; color: rgb(17, 17, 17); font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-size: 16px;\"><ul class=\"css-1vql4bw eru6lik0 nds-list\" style=\"box-sizing: inherit; margin-bottom: 0px; margin-left: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-alternates: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; vertical-align: baseline; list-style: none; color: rgb(17, 17, 17);\"><li data-testid=\"product-description-color-description\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Shown:&nbsp;White/University Blue</li><li data-testid=\"product-description-style-color\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Style:&nbsp;DD9315-100</li></ul>', 'AIR+JORDAN+1+LOW.avif', 'AIR+JORDAN+1+LOW (2).avif', 'AIR+JORDAN+1+LOW (1).avif', 0, 'In Stock', '2025-05-24 11:38:06', NULL, NULL, NULL),
 (2, 3, 15, 'Air Jordan 1 Low', 'Nike', 10000, 15000, '<p class=\"nds-text css-pxxozx e1yhcai00 text-align-start appearance-body1 color-primary weight-regular\" data-testid=\"product-description\" style=\"box-sizing: inherit; margin-bottom: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 16px; line-height: 1.5; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; vertical-align: baseline; color: rgb(17, 17, 17);\">Inspired by the original that debuted in 1985, the Air Jordan 1 Low offers a clean, classic look that\'s familiar yet always fresh. With an iconic design that pairs perfectly with any \'fit, these kicks ensure you\'ll always be on point.</p><br style=\"box-sizing: inherit; color: rgb(17, 17, 17); font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-size: 16px;\"><ul class=\"css-1vql4bw eru6lik0 nds-list\" style=\"box-sizing: inherit; margin-bottom: 0px; margin-left: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-alternates: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; vertical-align: baseline; list-style: none; color: rgb(17, 17, 17);\"><li data-testid=\"product-description-color-description\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Shown:&nbsp;White/White/White</li><li data-testid=\"product-description-style-color\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Style:&nbsp;553558-136</li></ul>', 'AIR+JORDAN+1+RETRO+HIGH+OG.avif', 'AIR+JORDAN+1+RETRO+HIGH+OG (2).avif', 'AIR+JORDAN+1+RETRO+HIGH+OG (1).avif', 0, 'In Stock', '2025-05-24 12:09:02', NULL, NULL, NULL),
 (3, 3, 15, 'Air Jordan 4 RM', 'Nike', 15000, 18000, '<p class=\"nds-text css-pxxozx e1yhcai00 text-align-start appearance-body1 color-primary weight-regular\" data-testid=\"product-description\" style=\"box-sizing: inherit; margin-bottom: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 16px; line-height: 1.5; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; vertical-align: baseline; color: rgb(17, 17, 17);\">The remix you didn\'t know you needed. Made for life on the go, these sneakers reimagine the AJ4 with comfort and durability in mind. Max Air cushions your every step. Plus, elements of the upper are blended into a strong, flexible cage that wraps the shoe to add a ruggedness to your everyday commute.</p><br style=\"box-sizing: inherit; color: rgb(17, 17, 17); font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-size: 16px;\"><ul class=\"css-1vql4bw eru6lik0 nds-list\" style=\"box-sizing: inherit; margin-bottom: 0px; margin-left: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-alternates: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; vertical-align: baseline; list-style: none; color: rgb(17, 17, 17);\"><li data-testid=\"product-description-color-description\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Shown:&nbsp;Seafoam/Sail/Sail</li><li data-testid=\"product-description-style-color\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Style:&nbsp;FQ7940-003</li></ul>', 'AIR+JORDAN+1+LOW+PRM.avif', 'AIR+JORDAN+1+LOW+PRM (1).avif', 'AIR+JORDAN+1+LOW+PRM (2).avif', 0, 'In Stock', '2025-05-24 12:18:49', NULL, NULL, NULL),
 (5, 3, 16, 'Nike Dunk Low Retro', 'Nike', 10000, 12000, '<p class=\"nds-text css-pxxozx e1yhcai00 text-align-start appearance-body1 color-primary weight-regular\" data-testid=\"product-description\" style=\"box-sizing: inherit; margin-bottom: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; font-size: 16px; line-height: 1.5; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; vertical-align: baseline; color: rgb(17, 17, 17);\">Created for the hardwood but taken to the streets, the Nike Dunk Low Retro returns with crisp overlays and original team colors. This basketball icon channels \'80s vibes with premium leather in the upper that looks good and breaks in even better. Modern footwear technology helps bring the comfort into the 21st century.</p><br style=\"box-sizing: inherit; color: rgb(17, 17, 17); font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-size: 16px;\"><ul class=\"css-1vql4bw eru6lik0 nds-list\" style=\"box-sizing: inherit; margin-bottom: 0px; margin-left: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-alternates: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit; font-family: &quot;Helvetica Now Text&quot;, Helvetica, Arial, sans-serif; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; vertical-align: baseline; list-style: none; color: rgb(17, 17, 17);\"><li data-testid=\"product-description-color-description\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Shown:&nbsp;White/White/Black</li><li data-testid=\"product-description-style-color\" style=\"box-sizing: inherit; margin: 0px 0px 0px 27px; padding: 0px 0px 4px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: 1.5; vertical-align: baseline; list-style: disc;\">Style:&nbsp;DD1391-100</li></ul>', 'NIKE+DUNK+LOW+RETRO.avif', 'NIKE+DUNK+LOW+RETRO (2).avif', 'NIKE+DUNK+LOW+RETRO (1).avif', 0, 'In Stock', '2025-05-24 12:22:54', NULL, NULL, NULL),
@@ -275,7 +334,43 @@ INSERT INTO `userlog` (`id`, `userEmail`, `userip`, `loginTime`, `logout`, `stat
 (5, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-05-22 07:56:31', NULL, 1),
 (6, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-05-24 11:38:43', NULL, 0),
 (7, 'johndeo@gmail.com', 0x3132372e302e302e3100000000000000, '2025-06-03 15:56:11', NULL, 0),
-(8, 'khankashif1363@gmail.com', 0x3132372e302e302e3100000000000000, '2025-06-03 15:57:44', NULL, 1);
+(8, 'khankashif1363@gmail.com', 0x3132372e302e302e3100000000000000, '2025-06-03 15:57:44', NULL, 1),
+(9, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 05:11:28', NULL, 0),
+(10, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 05:12:47', NULL, 1),
+(11, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 05:55:25', NULL, 1),
+(12, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 09:03:52', NULL, 1),
+(13, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 09:06:27', NULL, 1),
+(14, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 09:30:45', '22-06-2025 04:08:00 PM', 1),
+(15, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 10:38:08', '22-06-2025 04:13:05 PM', 1),
+(16, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 10:43:13', '22-06-2025 04:20:16 PM', 1),
+(17, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 10:50:26', NULL, 1),
+(18, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 10:51:27', NULL, 1),
+(19, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 16:14:55', NULL, 1),
+(20, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-22 16:43:27', NULL, 1),
+(21, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 02:48:07', NULL, 0),
+(22, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 02:50:30', NULL, 1),
+(23, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 02:55:29', NULL, 1),
+(24, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 07:41:13', NULL, 1),
+(25, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 08:04:54', NULL, 1),
+(26, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-23 15:50:10', NULL, 1),
+(27, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-24 04:30:42', NULL, 1),
+(28, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-24 11:57:21', NULL, 1),
+(29, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-24 12:11:55', NULL, 0),
+(30, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-24 12:12:01', NULL, 0),
+(31, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-24 12:12:10', NULL, 1),
+(32, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 02:59:35', NULL, 0),
+(33, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 02:59:52', NULL, 1),
+(34, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 03:52:56', NULL, 0),
+(35, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 03:53:12', '25-06-2025 10:38:11 AM', 1),
+(36, 'abc@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 04:53:25', NULL, 0),
+(37, 'amit@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 04:54:13', NULL, 1),
+(38, 'amit@gmail.com', 0x3a3a3100000000000000000000000000, '2025-06-25 05:25:15', NULL, 1),
+(39, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-02 04:58:33', NULL, 0),
+(40, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-02 04:58:38', NULL, 0),
+(41, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-02 04:58:46', NULL, 0),
+(42, 'khankashif1363@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-02 04:58:53', NULL, 0),
+(43, 'amit@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-02 05:00:48', NULL, 1),
+(44, 'amit@gmail.com', 0x3a3a3100000000000000000000000000, '2025-07-03 06:17:33', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -298,15 +393,16 @@ CREATE TABLE `users` (
   `billingCity` varchar(255) DEFAULT NULL,
   `billingPincode` int(11) DEFAULT NULL,
   `regDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updationDate` varchar(255) DEFAULT NULL
+  `updationDate` varchar(255) DEFAULT NULL,
+  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `contactno`, `password`, `shippingAddress`, `shippingState`, `shippingCity`, `shippingPincode`, `billingAddress`, `billingState`, `billingCity`, `billingPincode`, `regDate`, `updationDate`) VALUES
-(7, 'Demo', 'khankashif1363@gmail.com', 9810101010, 'f925916e2754e5e03f75dd58a5733251', 'ktm', 'Bagmati', 'ktm', 44600, 'ktm', 'Bagmati', 'Ktm', 44600, '2025-06-03 15:57:27', NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `contactno`, `password`, `shippingAddress`, `shippingState`, `shippingCity`, `shippingPincode`, `billingAddress`, `billingState`, `billingCity`, `billingPincode`, `regDate`, `updationDate`, `status`) VALUES
+(8, 'Amit', 'amit@gmail.com', 9800000000, '827ccb0eea8a706c4c34a16891f84e7b', 'Kathmandu', 'Bagmati Province', 'Kathmandu', 44600, NULL, NULL, NULL, NULL, '2025-06-25 04:54:02', NULL, 'Active');
 
 -- --------------------------------------------------------
 
@@ -332,6 +428,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -347,6 +449,12 @@ ALTER TABLE `orders`
 -- Indexes for table `ordertrackhistory`
 --
 ALTER TABLE `ordertrackhistory`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -396,22 +504,34 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `ordertrackhistory`
 --
 ALTER TABLE `ordertrackhistory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `productreviews`
@@ -429,25 +549,25 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `userlog`
 --
 ALTER TABLE `userlog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

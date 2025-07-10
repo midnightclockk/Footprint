@@ -63,10 +63,13 @@ header('location:logout.php');
                                         </tr>
                                     </thead>
                                     <tbody>
-<?php $query=mysqli_query($con,"SELECT MIN(orders.id) as id, COALESCE(orderNumber, 'N/A') as orderNumber, users.name, SUM(totalAmount) as totalAmount, MIN(orderDate) as orderDate, COALESCE(MAX(orderStatus), 'N/A') as orderStatus, paymentMethod FROM orders JOIN users ON users.id=orders.userId GROUP BY orderNumber ORDER BY orderDate DESC");
+<?php // Show all placed orders (not just cart), i.e., orders with paymentMethod IS NOT NULL
+$query=mysqli_query($con,"SELECT MIN(orders.id) as id, COALESCE(orderNumber, 'N/A') as orderNumber, users.name, SUM(totalAmount) as totalAmount, MIN(orderDate) as orderDate, COALESCE(MAX(orderStatus), 'N/A') as orderStatus, paymentMethod FROM orders JOIN users ON users.id=orders.userId WHERE orders.paymentMethod IS NOT NULL GROUP BY orderNumber ORDER BY orderDate DESC");
 $cnt=1;
+$orderFound = false;
 while($row=mysqli_fetch_array($query))
 {
+    $orderFound = true;
 ?>  
                                         <tr>
                                             <td><?php echo htmlentities($cnt);?></td>
@@ -100,6 +103,9 @@ while($row=mysqli_fetch_array($query))
                                             </td>
                                         </tr>
 <?php $cnt=$cnt+1; } ?>
+<?php if (!$orderFound): ?>
+    <tr><td colspan="9" style="text-align:center; font-size:18px; color:#c00; font-weight:bold;">Order is not placed yet.</td></tr>
+<?php endif; ?>
                                     </tbody>
                                 </table>
                                 </div>

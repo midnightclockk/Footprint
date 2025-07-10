@@ -30,7 +30,7 @@ if (!$user) {
 $items_sql = "SELECT oi.*, p.productName, p.productCompany, p.productImage1, p.category, p.subCategory 
               FROM order_items oi 
               LEFT JOIN products p ON oi.productId = p.id 
-              WHERE oi.orderId = '" . intval($order['id']) . "'";
+              WHERE oi.order_id = '" . mysqli_real_escape_string($con, $order['orderNumber']) . "'";
 $items_res = mysqli_query($con, $items_sql);
 $items = [];
 while ($row = mysqli_fetch_assoc($items_res)) {
@@ -335,7 +335,6 @@ while ($row = mysqli_fetch_assoc($items_res)) {
             </div>
             <!-- Product Details Table with Images -->
             <div style="overflow-x:auto; margin-bottom: 16px;">
-                <?php $subtotal = 0; ?>
                 <table style="width:100%; border-collapse:collapse; font-size:13px;">
                     <thead>
                         <tr style="background:#f3f3f3;">
@@ -349,6 +348,7 @@ while ($row = mysqli_fetch_assoc($items_res)) {
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $subtotal = 0; ?>
                         <?php foreach ($items as $item): ?>
                         <?php $subtotal += ($item['price'] * $item['quantity']) - (isset($item['discount']) ? $item['discount'] : 0); ?>
                         <tr>

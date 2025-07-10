@@ -56,8 +56,10 @@ if(strlen($_SESSION['alogin'])==0) {
 $status='Delivered';
 $query=mysqli_query($con,"select users.name as username,users.email as useremail,users.contactno as usercontact,products.productName as productname,orders.orderDate as orderdate,orders.id as id, orders.orderNumber as orderNumber from orders join users on orders.userId=users.id join products on products.id=orders.productId where orders.orderStatus!='$status' or orders.orderStatus is null");
 $cnt=1;
+$orderFound = false;
 while($row=mysqli_fetch_array($query))
 {
+	$orderFound = true;
 ?>
 									<tr>
 										<td><?php echo htmlentities($cnt);?></td>
@@ -73,6 +75,9 @@ while($row=mysqli_fetch_array($query))
 										</td>
 									</tr>
 <?php $cnt++; } ?>
+<?php if (!$orderFound): ?>
+    <tr><td colspan="9" style="text-align:center; font-size:18px; color:#c00; font-weight:bold;">Order is not pending yet.</td></tr>
+<?php endif; ?>
 								</tbody>
 							</table>
 						</div>

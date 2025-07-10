@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Kathmandu');
 session_start();
 // khalti-response.php
 // See: https://docs.khalti.com/
@@ -42,20 +43,28 @@ if (isset($result['status']) && $result['status'] === 'Completed') {
     if ($check && mysqli_num_rows($check) > 0) {
         $order_exists = true;
     }
-    if (!$order_exists && !empty($_SESSION['cart']) && $user_id) {
-        // Insert order
+    if (!$order_exists && $user_id) {
         $now = date('Y-m-d H:i:s');
-        $insert_order = mysqli_query($con, "INSERT INTO orders (orderNumber, userId, orderDate, totalAmount, paymentMethod, orderStatus) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($user_id)."', '$now', '".floatval($total_amount)."', 'Khalti', 'Paid')");
-        $order_id = mysqli_insert_id($con);
-        // Insert order items
-        foreach ($_SESSION['cart'] as $pid => $item) {
-            $qty = intval($item['quantity']);
-            $price = floatval($item['price']);
-            mysqli_query($con, "INSERT INTO order_items (order_id, productId, quantity, price) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($pid)."', '$qty', '$price')");
+        if (!empty($_SESSION['buy_now'])) {
+            // Buy Now: insert only the selected product
+            $buyNowProduct = $_SESSION['buy_now'];
+            $total_amount = $buyNowProduct['quantity'] * $buyNowProduct['price'];
+            $insert_order = mysqli_query($con, "INSERT INTO orders (orderNumber, userId, orderDate, totalAmount, paymentMethod, orderStatus) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($user_id)."', '$now', '".floatval($total_amount)."', 'Khalti', 'Paid')");
+            $order_id = mysqli_insert_id($con);
+            mysqli_query($con, "INSERT INTO order_items (order_id, productId, quantity, price) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($buyNowProduct['id'])."', '".intval($buyNowProduct['quantity'])."', '".floatval($buyNowProduct['price'])."')");
+            unset($_SESSION['buy_now']);
+        } elseif (!empty($_SESSION['cart'])) {
+            // Cart: insert all cart items
+            $insert_order = mysqli_query($con, "INSERT INTO orders (orderNumber, userId, orderDate, totalAmount, paymentMethod, orderStatus) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($user_id)."', '$now', '".floatval($total_amount)."', 'Khalti', 'Paid')");
+            $order_id = mysqli_insert_id($con);
+            foreach ($_SESSION['cart'] as $pid => $item) {
+                $qty = intval($item['quantity']);
+                $price = floatval($item['price']);
+                mysqli_query($con, "INSERT INTO order_items (order_id, productId, quantity, price) VALUES ('".mysqli_real_escape_string($con, $order_number)."', '".intval($pid)."', '$qty', '$price')");
+            }
+            unset($_SESSION['cart']);
+            unset($_SESSION['cart_total']);
         }
-        // Clear cart
-        unset($_SESSION['cart']);
-        unset($_SESSION['cart_total']);
     }
     // Payment successful: show styled success card
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">';

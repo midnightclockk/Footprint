@@ -63,7 +63,7 @@ header('location:logout.php');
                                         </tr>
                                     </thead>
                                     <tbody>
-<?php $query=mysqli_query($con,"SELECT MIN(orders.id) as id, COALESCE(orderNumber, 'N/A') as orderNumber, users.name, SUM(totalAmount) as totalAmount, MIN(orderDate) as orderDate, paymentMethod FROM orders JOIN users ON users.id=orders.userId WHERE (orderStatus IS NULL OR orderStatus='') GROUP BY orderNumber ORDER BY orderDate DESC");
+<?php $query=mysqli_query($con,"SELECT MIN(orders.id) as id, COALESCE(orderNumber, 'N/A') as orderNumber, users.name, SUM(totalAmount) as totalAmount, MIN(orderDate) as orderDate, paymentMethod FROM orders JOIN users ON users.id=orders.userId WHERE (orderStatus IS NULL OR orderStatus='') AND orders.paymentMethod IS NOT NULL AND DATE(orderDate) = CURDATE() GROUP BY orderNumber ORDER BY orderDate DESC");
 $cnt=1;
 while($row=mysqli_fetch_array($query))
 {

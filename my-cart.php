@@ -40,8 +40,10 @@ if(strlen($_SESSION['login'])==0)
 header('location:login.php');
 }
 else{
+	$orderno = 'order_' . uniqid();
+	$_SESSION['last_order_number'] = $orderno;
 	foreach($_SESSION['cart'] as $pid => $item){
-		mysqli_query($con,"insert into orders(userId,productId,quantity) values('".$_SESSION['id']."','".$pid."','".$item['quantity']."')");
+		mysqli_query($con,"insert into orders(orderNumber, userId, productId, quantity) values('$orderno', '".$_SESSION['id']."','$pid','".$item['quantity']."')");
 	}
 	header('location:payment-method.php');
 	exit;

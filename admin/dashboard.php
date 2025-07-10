@@ -5,24 +5,28 @@ if(strlen( $_SESSION["alogin"])==0)
 header('location:logout.php');
 } else { 
 
-$ret=mysqli_query($con,"select count(id) as totalorders,
-count(if((orderStatus='' || orderStatus is null),0,null)) as neworders,
-count(if(orderStatus='Packed', 0,null)) as packedorders,
+$ret=mysqli_query($con,"SELECT COUNT(DISTINCT orderNumber) as totalorders FROM orders WHERE paymentMethod IS NOT NULL");
+$results=mysqli_fetch_array($ret);
+$torders=$results['totalorders'];
+
+$ret2=mysqli_query($con,"SELECT COUNT(DISTINCT orderNumber) as neworders FROM orders WHERE (orderStatus IS NULL OR orderStatus='') AND paymentMethod IS NOT NULL AND DATE(orderDate) = CURDATE()");
+$results2=mysqli_fetch_array($ret2);
+$norders=$results2['neworders'];
+
+$ret3=mysqli_query($con,"select count(if(orderStatus='Packed', 0,null)) as packedorders,
 count(if(orderStatus='Dispatched',  0,null)) as dispatchedorders,
 count(if(orderStatus='In Transit',  0,null)) as intransitorders,
 count(if(orderStatus='Out For Delivery', 0,null)) as outfdorders,
 count(if(orderStatus='Delivered', 0,null)) as deliveredorders,
 count(if(orderStatus='Cancelled', 0,null)) as cancelledorders
 from orders;");
-$results=mysqli_fetch_array($ret);
-$torders=$results['totalorders'];
-$norders=$results['neworders'];
-$porders=$results['packedorders'];
-$dtorders=$results['dispatchedorders'];
-$intorders=$results['intransitorders'];
-$otforders=$results['outfdorders'];
-$deliveredorders=$results['deliveredorders'];
-$cancelledorders=$results['cancelledorders'];
+$results3=mysqli_fetch_array($ret3);
+$porders=$results3['packedorders'];
+$dtorders=$results3['dispatchedorders'];
+$intorders=$results3['intransitorders'];
+$otforders=$results3['outfdorders'];
+$deliveredorders=$results3['deliveredorders'];
+$cancelledorders=$results3['cancelledorders'];
 
 $ret1=mysqli_query($con,"select count(id) as totalusers from users;");
 $results1=mysqli_fetch_array($ret1);

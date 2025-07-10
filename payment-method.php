@@ -2,17 +2,54 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+
+$totalprice = 0;
+$buyNowProduct = null;
+if (!empty($_SESSION['buy_now'])) {
+    $buyNowProduct = $_SESSION['buy_now'];
+    $totalprice = $buyNowProduct['quantity'] * $buyNowProduct['price'];
+} elseif (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $id => $item) {
+        $totalprice += $item['quantity'] * $item['price'];
+    }
+}
 if(strlen($_SESSION['login'])==0)
     {   
 header('location:login.php');
 }
 else{
 	if (isset($_POST['submit'])) {
-
-		mysqli_query($con,"update orders set 	paymentMethod='".$_POST['paymethod']."' where userId='".$_SESSION['id']."' and paymentMethod is null ");
-		unset($_SESSION['cart']);
-		header('location:order-history.php');
-
+		if (!empty($_SESSION['buy_now'])) {
+			// Process Buy Now order (do not clear cart)
+			mysqli_query($con,"update orders set paymentMethod='".$_POST['paymethod']."' where userId='".$_SESSION['id']."' and paymentMethod is null ");
+			if ($_POST['paymethod'] === 'COD') {
+				$orderNumber = isset($_SESSION['last_order_number']) ? $_SESSION['last_order_number'] : '';
+				unset($_SESSION['buy_now']);
+				unset($_SESSION['last_order_number']);
+				header('location:payment-success.php?orderNumber=' . urlencode($orderNumber));
+				exit;
+			} else {
+				unset($_SESSION['buy_now']);
+				unset($_SESSION['last_order_number']);
+				header('location:order-history.php');
+				exit;
+			}
+		} else {
+			// Process normal cart order
+			mysqli_query($con,"update orders set paymentMethod='".$_POST['paymethod']."' where userId='".$_SESSION['id']."' and paymentMethod is null ");
+			if ($_POST['paymethod'] === 'COD') {
+				$orderNumber = isset($_SESSION['last_order_number']) ? $_SESSION['last_order_number'] : '';
+				unset($_SESSION['cart']);
+				unset($_SESSION['last_order_number']);
+				header('location:payment-success.php?orderNumber=' . urlencode($orderNumber));
+				exit;
+			} else {
+				unset($_SESSION['cart']);
+				unset($_SESSION['last_order_number']);
+				header('location:order-history.php');
+				exit;
+			}
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -161,7 +198,48 @@ else{
 		</div><!-- /.checkout-box -->
 		<!-- ============================================== BRANDS CAROUSEL ============================================== -->
 <?php include('includes/brands-slider.php');?>
-<!-- ============================================== BRANDS CAROUSEL : END ============================================== -->	</div><!-- /.container -->
+<!-- ============================================== BRANDS CAROUSEL : END ============================================== -->
+<div class="order-summary">
+    <h3>Order Summary</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if ($buyNowProduct): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($buyNowProduct['name']); ?></td>
+                <td><?php echo (int)$buyNowProduct['quantity']; ?></td>
+                <td>Rs.<?php echo (int)$buyNowProduct['price']; ?></td>
+                <td>Rs.<?php echo (int)($buyNowProduct['quantity'] * $buyNowProduct['price']); ?></td>
+            </tr>
+        <?php elseif (!empty($_SESSION['cart'])): ?>
+            <?php foreach ($_SESSION['cart'] as $id => $item): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($item['name'] ?? 'Product'); ?></td>
+                <td><?php echo (int)$item['quantity']; ?></td>
+                <td>Rs.<?php echo (int)$item['price']; ?></td>
+                <td>Rs.<?php echo (int)($item['quantity'] * $item['price']); ?></td>
+            </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr><td colspan="4">No items in order.</td></tr>
+        <?php endif; ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" style="text-align:right;">Total:</th>
+                <th>Rs.<?php echo (int)$totalprice; ?></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+	</div><!-- /.container -->
 </div><!-- /.body-content -->
 <?php include('includes/footer.php');?>
 	<script src="assets/js/jquery-1.11.1.min.js"></script>

@@ -6,10 +6,22 @@
 session_start();
 
 // 1. Get order/cart info (robust handling)
-$cart_total_raw = isset($_SESSION['cart_total']) ? $_SESSION['cart_total'] : 0;
-$cart_total_clean = str_replace(',', '', $cart_total_raw); // Remove commas if present
-$cart_total = is_numeric($cart_total_clean) ? (float)$cart_total_clean : 0;
-$amount = (int)($cart_total * 100); // Khalti expects amount in paisa
+$amount = 0;
+if (!empty($_SESSION['buy_now'])) {
+    $buyNowProduct = $_SESSION['buy_now'];
+    $amount = (int)($buyNowProduct['quantity'] * $buyNowProduct['price'] * 100); // paisa
+} elseif (!empty($_SESSION['cart'])) {
+    $cart_total = 0;
+    foreach ($_SESSION['cart'] as $id => $item) {
+        $cart_total += $item['quantity'] * $item['price'];
+    }
+    $amount = (int)($cart_total * 100); // paisa
+} else {
+    $cart_total_raw = isset($_SESSION['cart_total']) ? $_SESSION['cart_total'] : 0;
+    $cart_total_clean = str_replace(',', '', $cart_total_raw); // Remove commas if present
+    $cart_total = is_numeric($cart_total_clean) ? (float)$cart_total_clean : 0;
+    $amount = (int)($cart_total * 100); // paisa
+}
 $order_id = uniqid('order_'); // Or use your actual order ID
 $_SESSION['last_order_number'] = $order_id;
 

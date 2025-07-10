@@ -19,7 +19,7 @@ echo "<script>alert('Your info has been updated');</script>";
 	}
 
 
-date_default_timezone_set('Asia/Kolkata');// change according timezone
+date_default_timezone_set('Asia/Kathmandu');// change according timezone
 $currentTime = date( 'd-m-Y h:i:s A', time () );
 
 

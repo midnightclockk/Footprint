@@ -77,8 +77,10 @@ if(isset($_GET['deluser'])){
                                     <tbody>
 <?php $query=mysqli_query($con,"select * from users");
 $cnt=1;
+$userFound = false;
 while($row=mysqli_fetch_array($query))
 {
+    $userFound = true;
 ?>  
                                         <tr>
                                             <td><?php echo htmlentities($cnt);?></td>
@@ -111,6 +113,9 @@ while($row=mysqli_fetch_array($query))
                                             </td>
                                         </tr>
 <?php $cnt=$cnt+1; } ?>
+<?php if (!$userFound): ?>
+    <tr><td colspan="9" style="text-align:center; font-size:18px; color:#c00; font-weight:bold;">No users registered yet.</td></tr>
+<?php endif; ?>
                                     </tbody>
                                 </table>
                                 </div>
